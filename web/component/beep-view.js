@@ -35,35 +35,32 @@ export class BeepView extends BeeperBase {
   }
 
   render() {
-    return html` <div class="beep">
+    return html`<div class="beep">
       <div class="beep-header">
         <img
-          src="${this.beep.authorPicture}"
+          src=${this.beep.authorPicture}
           alt="Profile picture of ${this.beep.authorName}"
           class="author-profile-picture"
         />
         <div>
-          <a class="author" href="/user/${this.beep.authorName}">
-            ${this.beep.authorName}
-          </a>
+          <span class="author"> ${this.beep.authorName}</span>
           <span class="created-at">
-            &nbsp;- ${new Date(this.beep.createdAt).toLocaleString()} -&nbsp;
-          </span>
-          <span
-            class="likes ${this.beep.liked ? "liked" : ""}"
-            ${this.beep.liked ? "data-liked" : ""}
-          >
-            <span
-              class="like-count ${this.beep.liked ? "liked" : ""}"
-              @click=${this.handleLike}
-            >
-              ${this.beep.likeCount}
-            </span>
-            +
+            &nbsp;- ${new Date(this.beep.createdAt).toLocaleString()} &nbsp;
           </span>
         </div>
       </div>
-      <div>${this.beep.content}</div>
+      <div class="content">${this.beep.content}</div>
+      <div>
+        <span
+          class="likes ${this.beep.liked ? "liked" : ""}"
+          ${this.beep.liked ? "data-liked" : ""}
+        >
+          <span class="like-count">
+            ${this.beep.likeCount}
+            <a href="" @click=${this.handleLike}>🤍</a> - 0 💬 - 0 ↪
+            </span>
+        </span>
+      </div>
     </div>`;
   }
 
@@ -72,13 +69,22 @@ export class BeepView extends BeeperBase {
     css`
       .beep {
         margin-bottom: 16px;
+        font-family: Verdana;
+        border: 2px solid;
+        padding: 15px;
+        background-color: #070d33;
+        border-radius: 13px;
+        width: 60%;
+        color: white;
       }
-
+  
       .beep-header {
         display: flex;
         align-items: center;
+        border: 3px;
+        border-radius: 8px;
       }
-
+  
       .author-profile-picture {
         display: block;
         height: 24px;
@@ -86,23 +92,28 @@ export class BeepView extends BeeperBase {
         border-radius: 50%;
         margin-right: 6px;
       }
-
+  
       .author {
         font-weight: bold;
+        font-size: 17px;
       }
-
+  
       .created-at {
         font-style: italic;
-        font-size: 14px;
+        font-size: 10px;
       }
-
+  
       .likes {
         font-size: 12px;
         cursor: pointer;
       }
-
+  
       .liked {
         font-weight: bold;
+      }
+  
+      .content {
+        margin: 7px;
       }
     `,
   ];

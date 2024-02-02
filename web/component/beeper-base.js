@@ -17,4 +17,5 @@ export class BeeperBase extends LitElement {
     `;
   }
 }
+
 customElements.define("beeper-base", BeeperBase);

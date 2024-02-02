@@ -23,6 +23,7 @@ api.get("/home", async (req, res) => {
   res.json(beeps);
 });
 
+
 api.post("/beep", async (req, res) => {
   try {
     const postedBeep = await postBeep(req.user, req.body.content);
@@ -100,3 +101,5 @@ api.put("/unlike/:beepId", async (req, res) => {
     }
   }
 });
+
+
