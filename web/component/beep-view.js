@@ -6,10 +6,14 @@ export class BeepView extends BeeperBase {
     beep: {
       type: Object,
     },
+    isDeleted: {
+      type: Boolean,
+    },
   };
 
   constructor() {
     super();
+    this.isDeleted = false;
   }
 
   async handleLike() {
@@ -34,8 +38,21 @@ export class BeepView extends BeeperBase {
     }
   }
 
+  async handleDelete() {
+    await fetch(`/api/delete/${this.beep.id}`, {
+      method: "DELETE",
+    });
+
+    this.isDeleted = true;
+  }
+  
   render() {
-    return html` <div class="beep">
+    if (this.isDeleted) {
+      return html``;
+    }
+    
+    return html`
+      <div class="beep">
       <div class="beep-header">
         <img
           src="${this.beep.authorPicture}"
@@ -61,6 +78,7 @@ export class BeepView extends BeeperBase {
             </span>
             +
           </span>
+          <button class="delete" @click=${this.handleDelete}>🗑</button>
         </div>
       </div>
       <div>${this.beep.content}</div>
