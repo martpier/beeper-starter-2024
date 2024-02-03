@@ -43,7 +43,9 @@ export class BeepView extends BeeperBase {
           class="author-profile-picture"
         />
         <div>
-          <span class="author"> ${this.beep.authorName}</span>
+        <a class="author" href="/user/${this.beep.authorName}">
+            ${this.beep.authorName}
+          </a>
           <span class="created-at">
             &nbsp;- ${new Date(this.beep.createdAt).toLocaleString()} &nbsp;
           </span>

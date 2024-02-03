@@ -38,7 +38,7 @@ class BeeperHome extends BeeperBase {
     console.log(this.suggestions);
   }
 
-  async postBeep(event) {
+  async handlePostBeep(event) {
     if (event.code === "Enter" && !event.getModifierState("Shift")) {
       const textarea = event.target;
 
@@ -65,11 +65,14 @@ class BeeperHome extends BeeperBase {
 
 
   render() {
-    return html` <h1>Welcome ${this.userName}!</h1>
+    return html`
+    <div style="margin-left: 35px;">
+     <h1>Welcome ${this.userName}!</h1>
       <textarea
         @keyup=${this.handlePostBeep}
         style="margin-bottom: 40px; margin-top:20px; width: 40%"
       ></textarea>
+  </div>
       <div class="layout-container">
         <aside class="sidebar">sidebar</aside>
         <main>
