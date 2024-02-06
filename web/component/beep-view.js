@@ -43,7 +43,7 @@ export class BeepView extends BeeperBase {
           class="author-profile-picture"
         />
         <div>
-        <a class="author" href="/user/${this.beep.authorName}">
+          <a class="author" href="/user/${this.beep.authorName}">
             ${this.beep.authorName}
           </a>
           <span class="created-at">
@@ -60,7 +60,7 @@ export class BeepView extends BeeperBase {
           <span class="like-count">
             ${this.beep.likeCount}
             <a href="" @click=${this.handleLike}>🤍</a> - 0 💬 - 0 ↪
-            </span>
+          </span>
         </span>
       </div>
     </div>`;
@@ -74,19 +74,20 @@ export class BeepView extends BeeperBase {
         font-family: Verdana;
         border: 2px solid;
         padding: 15px;
-        background-color: #070d33;
+        // background-color: #070d33;
+        background-color: black;
         border-radius: 13px;
-        width: 60%;
+        width: 80%;
         color: white;
       }
-  
+
       .beep-header {
         display: flex;
         align-items: center;
         border: 3px;
         border-radius: 8px;
       }
-  
+
       .author-profile-picture {
         display: block;
         height: 24px;
@@ -94,26 +95,26 @@ export class BeepView extends BeeperBase {
         border-radius: 50%;
         margin-right: 6px;
       }
-  
+
       .author {
         font-weight: bold;
         font-size: 17px;
       }
-  
+
       .created-at {
         font-style: italic;
         font-size: 10px;
       }
-  
+
       .likes {
         font-size: 12px;
         cursor: pointer;
       }
-  
+
       .liked {
         font-weight: bold;
       }
-  
+
       .content {
         margin: 7px;
       }

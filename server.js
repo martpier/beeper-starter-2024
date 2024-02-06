@@ -12,7 +12,6 @@ const { auth, requiresAuth } = expressauth;
 
 const app = express();
 
-// auth router attaches /login, /logout, and /callback routes to the baseURL
 app.use(
   auth({
     authRequired: false,
@@ -36,8 +35,9 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/followee", async (req, res) => {
-  const userId = req.user.id
-  const suggestions = await queryNormalized(`
+  const userId = req.user.id;
+  const suggestions = await queryNormalized(
+    `
   SELECT DISTINCT u.name, u.picture, u.id
   FROM follow f INNER JOIN users u ON u.id = f.followee
   WHERE f.follower IN (
@@ -48,10 +48,45 @@ app.get("/api/followee", async (req, res) => {
       FROM follow f INNER JOIN users u ON u.id = f.followee
       WHERE f.follower = $1
     ) AND u.id != $1
-  `, [userId]);
-  res.json(suggestions)
-  console.log(suggestions)
-  });
+  `,
+    [userId]
+  );
+  res.json(suggestions);
+});
+
+app.get("/api/friends/", async (req, res) => {
+  const userId = req.user.id;
+  const friendsList = await queryNormalized(
+    `
+    SELECT DISTINCT u.name, u.picture, u.id
+    FROM follow f INNER JOIN users u ON u.id = f.followee
+    WHERE f.follower = $1
+    `,
+    [userId]
+  );
+  res.json(friendsList);
+});
+
+app.get("/api/mlm/", async (req, res) => {
+  const mlm = await queryNormalized(`
+    SELECT 
+      b.id, 
+      b.content,
+      b.created_at AS createdAt,
+      b.like_count AS likeCount,
+      b.author_id AS authorId,
+      u.name AS authorName,
+      u.picture AS authorPicture
+    FROM 
+      beep b 
+    INNER JOIN 
+      users u ON u.id = b.author_id
+    ORDER BY 
+      like_count DESC
+    LIMIT 10
+  `);
+  res.json(mlm);
+});
 
 app.get("/user/*", (req, res) => {
   res.sendFile(
@@ -65,14 +100,17 @@ app.get("/user/*", (req, res) => {
 app.post("/api/newFollow", async (req, res) => {
   const followeeId = req.body.followedUserId;
   const userId = req.user.id;
-  const newFollow = await queryNormalized(`
+  const newFollow = await queryNormalized(
+    `
   INSERT INTO follow (follower, followee)
   VALUES ($1, $2)
-  `, [userId, followeeId]);
+  `,
+    [userId, followeeId]
+  );
 
   console.log("ID de l'utilisateur :", userId, followeeId);
 
-  res.json({ message: 'Profil modifié avec succès' });
-})
+  res.json({ message: "Profil modifié avec succès" });
+});
 
 app.listen(3000);

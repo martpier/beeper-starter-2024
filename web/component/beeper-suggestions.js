@@ -14,7 +14,7 @@ export class SuggestionView extends BeeperBase {
 
   async handleFollow(event) {
     const followedUserId = event.target.id;
-    event.target.textContent = "Followed";
+    event.target.textContent = "Unfollowed";
     const response = await fetch("/api/newFollow", {
       method: "POST",
       headers: {
@@ -22,9 +22,6 @@ export class SuggestionView extends BeeperBase {
       },
       body: JSON.stringify({ followedUserId }),
     });
-
-    const result = await response.json();
-    console.log(result);
   }
 
   render() {
@@ -35,8 +32,14 @@ export class SuggestionView extends BeeperBase {
         class="author-profile-picture"
         style="border: 1px solid black;"
       />
-      <span class="user-name">${this.suggestion.name}</span>
-      <a href="#" class="follow-button" id="${this.suggestion.id}" @click=${this.handleFollow}
+      <a class="user-name" href="/user/${this.suggestion.name}">
+        ${this.suggestion.name}
+      </a>
+      <a
+        href="#"
+        class="follow-button"
+        id="${this.suggestion.id}"
+        @click=${this.handleFollow}
         >Follow</a
       >
     </div>`;
@@ -45,14 +48,14 @@ export class SuggestionView extends BeeperBase {
   static styles = [
     BeeperBase.styles,
     css`
-    .author-profile-picture {
+      .author-profile-picture {
         display: flex;
         height: 50px;
         width: 50px;
         border-radius: 50%;
         margin-right: 6px;
       }
-  
+
       .suggestions-css {
         flex-direction: row;
         border: 1px solid black;
@@ -60,10 +63,11 @@ export class SuggestionView extends BeeperBase {
         margin-bottom: 40px;
         padding: 10px;
         border-radius: 13px;
-        background-color: #070d33;
+        // background-color: #070d33;
+        background-color: black;
         align-items: center;
       }
-  
+
       .user-name {
         font-weight: bold;
         align-items: center;
@@ -74,7 +78,7 @@ export class SuggestionView extends BeeperBase {
         margin-left: 10px;
         color: white;
       }
-  
+
       .follow-button {
         font-weight: bold;
         text-decoration: none;
@@ -88,6 +92,10 @@ export class SuggestionView extends BeeperBase {
         text-align: center;
         background-color: white;
         border-radius: 13px;
+      }
+
+      h2 {
+        font-size: 30px;
       }
     `,
   ];

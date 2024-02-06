@@ -56,6 +56,7 @@ class UserPage extends BeeperBase {
         <span class="viewed-user-username"
           >${this.userInfo?.viewedUser.name}'s latest beeps</span
         >
+        <!-- <a href="/user/:user">Friends</p> -->
         ${this.isSelf
           ? ""
           : html`<button @click=${this.follow} class="follow-button">

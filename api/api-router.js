@@ -50,6 +50,19 @@ api.get("/user/:name", async (req, res) => {
   }
 });
 
+api.get("/friend/:userId", async (req, res) => {
+  try {
+    const userPage = await getUserPageByName(req.user.id, req.params.name);
+    res.status(200).json(userPage);
+  } catch (e) {
+    if (e instanceof UsernameNotFound) {
+      res.status(400).send("User not found");
+    } else {
+      throw e;
+    }
+  }
+});
+
 api.put("/follow/:userId", async (req, res) => {
   try {
     await follow(req.user.id, req.params.userId);
