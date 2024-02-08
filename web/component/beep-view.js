@@ -1,15 +1,21 @@
 import { css, html } from "lit";
 import { BeeperBase } from "./beeper-base.js";
+import "./rebeep-list.js";
 
 export class BeepView extends BeeperBase {
   static properties = {
     beep: {
       type: Object,
     },
+    rebeepList: {
+      state: true,
+    },
   };
 
   constructor() {
     super();
+    this.rebeepList = [];
+    this.show_reply_textarea = "visible";
   }
 
   async handleLike() {
@@ -31,6 +37,40 @@ export class BeepView extends BeeperBase {
         liked: true,
         likeCount: this.beep.likeCount + 1,
       };
+    }
+  }
+
+  show_textarea()  {  
+    if (this.show_reply_textarea === "hidden") {
+      this.show_reply_textarea = "visible";
+    } else {
+      this.show_reply_textarea = "hidden";
+    }
+    console.log(this.show_reply_textarea);
+ }
+
+  async postRebeep(event) {
+    if (event.code === "Enter" && !event.getModifierState("Shift")) {
+      const textarea = event.target;
+
+      let content = textarea.value;
+      content = content.slice(0, content.length - 1);
+
+      const response = await fetch("/api/beep", { //TODO: changer nom fonction
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          content,
+        }),
+      });
+
+      const postedRebeep = await response.json();
+
+      textarea.value = "";
+
+      this.rebeepList = [postedRebeep, ...this.rebeepList];
     }
   }
 
@@ -64,6 +104,11 @@ export class BeepView extends BeeperBase {
         </div>
       </div>
       <div>${this.beep.content}</div>
+      <div class="reply-box">
+        <span class="label-reply" @click=${this.show_textarea}> Répondre : </span>
+        <textarea id="reply-textarea-${this.beep.id}" @keyup=${this.postRebeep}></textarea>
+        </div>
+      <beep-list rebeepList=${JSON.stringify(this.rebeepList)}></rebeep-list>
     </div>`;
   }
 
@@ -72,6 +117,9 @@ export class BeepView extends BeeperBase {
     css`
       .beep {
         margin-bottom: 16px;
+        background-color: #CFD9E5;
+        padding: 5px;
+        border-radius: 10px;
       }
 
       .beep-header {
@@ -103,6 +151,18 @@ export class BeepView extends BeeperBase {
 
       .liked {
         font-weight: bold;
+      }
+
+      .reply-box {
+        padding: 5px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
+
+      .label-reply {
+        margin-right: 10px;
       }
     `,
   ];
