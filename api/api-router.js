@@ -3,7 +3,8 @@ import bodyParser from "body-parser";
 import { getUserHome } from "./use-case/get-user-home.js";
 import { postBeep } from "./use-case/post-beep.js";
 import { getUserPageByName } from "./use-case/get-user-page.js";
-import { like, unlike } from "./use-case/like.js";
+import { BeepNotFoundError, like, unlike } from "./use-case/like.js";
+import { postResponse } from "./use-case/response.js"
 import { follow, unfollow } from "./use-case/follow.js";
 import { authMiddleware } from "./auth/auth-middleware.js";
 
@@ -100,3 +101,18 @@ api.put("/unlike/:beepId", async (req, res) => {
     }
   }
 });
+
+api.put("/response/:beepId", async (req, res) => {
+  try  {
+    const postedResponse = await postResponse(req.user.id, req.params.beepId, req.body.content);
+    res.status(201).json(postedResponse);
+  } catch (e) {
+    if (e instanceof BeepNotFoundError) {
+      res.status(400).send("Beep not found");
+    } if (e instanceof BeepTooLongError) {
+      res.status(400).send("Response too long");
+    } else {
+      throw e;
+    }
+  }
+})
