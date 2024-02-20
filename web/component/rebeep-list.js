@@ -19,7 +19,7 @@ export class RebeepList extends BeeperBase {
   render() {
     return html`
       ${this.rebeepList.map(
-        (b) => html`<beep-view beep="${JSON.stringify(b)}"></beep-view>`
+        (b) => html`<rebeep-view rebeep="${JSON.stringify(b)}"></rebeep-view>`
       )}
     `;
   }

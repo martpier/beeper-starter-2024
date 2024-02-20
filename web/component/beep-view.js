@@ -23,7 +23,7 @@ export class BeepView extends BeeperBase {
     const response = await fetch(`/api/beepResponses/${this.beep.id}`);
     this.rebeepList = await response.json();
 
-    //this.userName = (await getActiveUserProfile()).name;
+    console.log(`${JSON.stringify(this.rebeepList)}`);
   }
 
   async handleLike() {
@@ -113,11 +113,11 @@ export class BeepView extends BeeperBase {
       </div>
       <div>${this.beep.content}</div>
       <div class="reply-box">
-        <span class="label-reply" @click=${this.show_textarea}> Répondre : </span>
+        <span class="label-reply" @click=${this.show_textarea}> Reply: </span>
         <textarea id="reply-textarea-${this.beep.id}" @keyup=${this.postRebeep}></textarea>
         </div>
-      <beep-list rebeepList=${JSON.stringify(this.rebeepList)}></rebeep-list>
-    </div>`;
+    </div>
+    <rebeep-list rebeepList=${JSON.stringify(this.rebeepList)}></rebeep-list>`;
   }
 
   static styles = [
@@ -163,10 +163,17 @@ export class BeepView extends BeeperBase {
 
       .reply-box {
         padding: 5px;
-        font-size: 12px;
+        font-size: 14px;
         display: flex;
         align-items: center;
         justify-content: flex-end;
+      }
+
+      textarea {
+        padding: 10px 10px;
+        border-radius: 10px;
+        background-color: #f8f8f8;
+        resize: none;
       }
 
       .label-reply {

@@ -72,6 +72,12 @@ export class RebeepView extends BeeperBase {
     css`
       .rebeep {
         margin-bottom: 16px;
+        margin-left: auto; 
+        margin-right: 0;
+        background-color: #DBD2F0;
+        padding: 5px;
+        border-radius: 10px;
+        width: 75%;
       }
 
       .rebeep-header {

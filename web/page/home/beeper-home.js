@@ -67,6 +67,10 @@ class BeeperHome extends BeeperBase {
         width: 100%;
         height: 64px;
         margin: 10px 0 20px 0;
+        padding: 10px 10px;
+        border-radius: 10px;
+        background-color: #f8f8f8;
+        resize: none;
       }
     `,
   ];
