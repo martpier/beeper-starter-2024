@@ -7,6 +7,7 @@ import { BeepNotFoundError, like, unlike } from "./use-case/like.js";
 import { postResponse } from "./use-case/response.js"
 import { follow, unfollow } from "./use-case/follow.js";
 import { authMiddleware } from "./auth/auth-middleware.js";
+import { getResponses } from "./use-case/get-responses.js";
 
 export const api = Router();
 
@@ -116,3 +117,9 @@ api.post("/response/:beepId", async (req, res) => {
     }
   }
 })
+
+api.get("/beepResponses/:beepId", async (req, res) => {
+  const responses = await getResponses(req.params.beepId);
+
+  res.json(responses);
+});
