@@ -56,7 +56,7 @@ export class BeepView extends BeeperBase {
       let content = textarea.value;
       content = content.slice(0, content.length - 1);
 
-      const response = await fetch("/api/beep", { //TODO: changer nom fonction
+      const response = await fetch(`/api/response/${this.beep.id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

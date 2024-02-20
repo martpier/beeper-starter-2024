@@ -36,7 +36,7 @@ export class RebeepView extends BeeperBase {
 
   render() {
     return html` <div class="rebeep">
-      <div class="beep-header">
+      <div class="rebeep-header">
         <img
           src="${this.rebeep.authorPicture}"
           alt="Profile picture of ${this.rebeep.authorName}"
@@ -74,7 +74,7 @@ export class RebeepView extends BeeperBase {
         margin-bottom: 16px;
       }
 
-      .beep-header {
+      .rebeep-header {
         display: flex;
         align-items: center;
       }
