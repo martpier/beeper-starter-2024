@@ -18,6 +18,14 @@ export class BeepView extends BeeperBase {
     this.show_reply_textarea = "visible";
   }
 
+  async connectedCallback() {
+    super.connectedCallback();
+    const response = await fetch(`/api/beepResponses/${this.beep.id}`);
+    this.rebeepList = await response.json();
+
+    //this.userName = (await getActiveUserProfile()).name;
+  }
+
   async handleLike() {
     if (this.beep.liked) {
       await fetch(`/api/unlike/${this.beep.id}`, {
