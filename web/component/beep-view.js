@@ -159,6 +159,7 @@ export class BeepView extends BeeperBase {
       }
 
       .reply-box {
+        visibility: hidden;
         padding: 5px;
         font-size: 14px;
         display: flex;
@@ -166,9 +167,14 @@ export class BeepView extends BeeperBase {
         justify-content: flex-end;
       }
 
+      .beep:hover .reply-box{
+        visibility: visible;
+      }
+
       textarea {
         padding: 10px 10px;
         border-radius: 10px;
+        width: 50%;
         background-color: #f8f8f8;
         resize: none;
       }
