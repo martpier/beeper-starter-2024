@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import { getUserHome } from "./use-case/get-user-home.js";
 import { postBeep } from "./use-case/post-beep.js";
 import { getUserPageByName } from "./use-case/get-user-page.js";
-import { BeepNotFoundError, like, unlike } from "./use-case/like.js";
+import { BeepNotFoundError, like, like_response, unlike, unlike_response } from "./use-case/like.js";
 import { postResponse } from "./use-case/response.js"
 import { follow, unfollow } from "./use-case/follow.js";
 import { authMiddleware } from "./auth/auth-middleware.js";
@@ -122,4 +122,30 @@ api.get("/beepResponses/:beepId", async (req, res) => {
   const responses = await getResponses(req.params.beepId);
 
   res.json(responses);
+});
+
+api.put("/like-response/:responseId", async (req, res) => {
+  try {
+    await like_response(req.user.id, req.params.responseId);
+    res.status(200).send();
+  } catch (e) {
+    if (e instanceof BeepNotFoundError) {
+      res.status(400).send("Response not found");
+    } else {
+      throw e;
+    }
+  }
+});
+
+api.put("/unlike-response/:responseId", async (req, res) => {
+  try {
+    await unlike_response(req.user.id, req.params.responseId);
+    res.status(200).send();
+  } catch (e) {
+    if (e instanceof BeepNotFoundError) {
+      res.status(400).send("Response not found");
+    } else {
+      throw e;
+    }
+  }
 });
