@@ -10,10 +10,10 @@ export async function unlike(userId, beepId) {
   await deleteLike(userId, beepId);
 }
 
-export async function like_response(userId, responseId) {
+export async function likeResponse(userId, responseId) {
   await insertResponseLike(userId, responseId)
 }
 
-export async function unlike_response(userId, responseId) {
+export async function unlikeResponse(userId, responseId) {
   await deleteResponseLike(userId, responseId)
 }

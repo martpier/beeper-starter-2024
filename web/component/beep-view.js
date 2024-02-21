@@ -22,8 +22,6 @@ export class BeepView extends BeeperBase {
     super.connectedCallback();
     const response = await fetch(`/api/beepResponses/${this.beep.id}`);
     this.rebeepList = await response.json();
-
-    console.log(`${JSON.stringify(this.rebeepList)}`);
   }
 
   async handleLike() {
@@ -54,7 +52,6 @@ export class BeepView extends BeeperBase {
     } else {
       this.show_reply_textarea = "hidden";
     }
-    console.log(this.show_reply_textarea);
  }
 
   async postRebeep(event) {

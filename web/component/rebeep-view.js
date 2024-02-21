@@ -14,7 +14,7 @@ export class RebeepView extends BeeperBase {
 
   async handleLike() {
     if (this.rebeep.liked) {
-      await fetch(`/api/unlike/${this.rebeep.id}`, { //TODO: changer nom fonction
+      await fetch(`/api/unlikeResponse/${this.rebeep.id}`, {
         method: "PUT",
       });
       this.rebeep = {
@@ -23,7 +23,7 @@ export class RebeepView extends BeeperBase {
         likeCount: this.rebeep.likeCount - 1,
       };
     } else {
-      await fetch(`/api/like/${this.rebeep.id}`, { //TODO: changer nom fonction
+      await fetch(`/api/likeResponse/${this.rebeep.id}`, {
         method: "PUT",
       });
       this.rebeep = {

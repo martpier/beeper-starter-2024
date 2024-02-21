@@ -1,6 +1,6 @@
 import { queryNormalized } from "./connection-pool.js";
 
-export async function getBeepResponses(beepId) {
+export async function getBeepResponses(beepId, userId) {
   return await queryNormalized(
     `
       WITH rebeep AS (
@@ -27,17 +27,17 @@ export async function getBeepResponses(beepId) {
         users.id AS author_id, 
         users.name AS author_name, 
         users.picture AS author_picture, 
-        liked.id IS NOT NULL AS "liked" 
+        liked_response.id IS NOT NULL AS "liked"
       FROM 
         rebeep 
         JOIN users ON rebeep.author_id = users.id 
-        LEFT JOIN liked ON liked.liker_id = $1
-        AND liked.beep_id = rebeep.id 
+        LEFT JOIN liked_response ON liked_response.liker_id = $2
+        AND liked_response.response_id = rebeep.id 
       ORDER BY 
         created_at DESC 
       LIMIT 
         10
     `,
-    [beepId]
+    [beepId, userId]
   );
 }

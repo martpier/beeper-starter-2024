@@ -66,7 +66,7 @@ export async function insertResponseLike(userId, responseId) {
     await checkResponseId(connection, responseId);
 
     const res = await connection.query(
-      "INSERT INTO liked-response (liker_id, response_id) VALUES ($1, $2) ON CONFLICT DO NOTHING",
+      "INSERT INTO liked_response (liker_id, response_id) VALUES ($1, $2) ON CONFLICT DO NOTHING",
       [userId, responseId]
     );
 
@@ -95,7 +95,7 @@ export async function deleteResponseLike(userId, responseId) {
     await checkResponseId(connection, responseId);
 
     const res = await connection.query(
-      "DELETE FROM liked-response WHERE liker_id = $1 AND response_id = $2",
+      "DELETE FROM liked_response WHERE liker_id = $1 AND response_id = $2",
       [userId, responseId]
     );
 
