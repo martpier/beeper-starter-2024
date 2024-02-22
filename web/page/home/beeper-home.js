@@ -57,6 +57,7 @@ class BeeperHome extends BeeperBase {
 
   async infiniteScroll() {
     this.NbLoaded += 10;
+    console.log(this.NbLoaded);
     await this.connectedCallback()
   }
 
@@ -64,7 +65,8 @@ class BeeperHome extends BeeperBase {
     return html` <beeper-header></beeper-header>
       <h1>Welcome ${this.userName}!</h1>
       <textarea @keyup=${this.postBeep}></textarea>
-      <beep-list beepList=${JSON.stringify(this.beepList)}></beep-list>`;
+      <beep-list beepList=${JSON.stringify(this.beepList)}></beep-list>
+      <span @click=${this.infiniteScroll}>Load More</span>`;
   }
 
   static styles = [
