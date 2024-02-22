@@ -10,17 +10,19 @@ export class BeepView extends BeeperBase {
     rebeepList: {
       state: true,
     },
+    nbLoaded: true
   };
 
   constructor() {
     super();
     this.rebeepList = [];
     this.show_reply_textarea = "visible";
+    this.nbLoaded = 10;
   }
 
   async connectedCallback() {
     super.connectedCallback();
-    const response = await fetch(`/api/beepResponses/${this.beep.id}`);
+    const response = await fetch(`/api/beepResponses/${this.beep.id}/${this.nbLoaded}`);
     this.rebeepList = await response.json();
   }
 
@@ -77,6 +79,11 @@ export class BeepView extends BeeperBase {
 
       this.rebeepList = [postedRebeep, ...this.rebeepList];
     }
+  }
+
+  async infiniteScroll() {
+    this.nbLoaded += 10;
+    await  this.connectedCallback();
   }
 
   render() {

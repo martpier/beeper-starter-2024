@@ -12,17 +12,19 @@ class BeeperHome extends BeeperBase {
     beepList: {
       state: true,
     },
+    NbLoaded: true
   };
 
   constructor() {
     super();
     this.beepList = [];
     this.userName = "";
+    this.NbLoaded = 10;
   }
 
   async connectedCallback() {
     super.connectedCallback();
-    const response = await fetch("/api/home");
+    const response = await fetch(`/api/home/${this.NbLoaded}`);
     this.beepList = await response.json();
 
     this.userName = (await getActiveUserProfile()).name;
@@ -51,6 +53,11 @@ class BeeperHome extends BeeperBase {
 
       this.beepList = [postedBeep, ...this.beepList];
     }
+  }
+
+  async infiniteScroll() {
+    this.NbLoaded += 10;
+    await this.connectedCallback()
   }
 
   render() {
