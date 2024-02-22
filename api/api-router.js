@@ -19,8 +19,8 @@ api.get("/me", (req, res) => {
   res.json(req.user);
 });
 
-api.get("/home", async (req, res) => {
-  const beeps = await getUserHome(req.user.id);
+api.get("/home/:Nb", async (req, res) => {
+  const beeps = await getUserHome(req.user.id, req.params.Nb);
 
   res.json(beeps);
 });
@@ -38,9 +38,9 @@ api.post("/beep", async (req, res) => {
   }
 });
 
-api.get("/user/:name", async (req, res) => {
+api.get("/user/:name/:Nb", async (req, res) => {
   try {
-    const userPage = await getUserPageByName(req.user.id, req.params.name);
+    const userPage = await getUserPageByName(req.user.id, req.params.name, req.params.Nb);
     res.status(200).json(userPage);
   } catch (e) {
     if (e instanceof UsernameNotFound) {
@@ -118,8 +118,8 @@ api.post("/response/:beepId", async (req, res) => {
   }
 })
 
-api.get("/beepResponses/:beepId", async (req, res) => {
-  const responses = await getResponses(req.params.beepId, req.user.id);
+api.get("/beepResponses/:beepId/:Nb", async (req, res) => {
+  const responses = await getResponses(req.params.beepId, req.user.id, req.params.Nb);
 
   res.json(responses);
 });

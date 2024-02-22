@@ -1,6 +1,6 @@
 import { queryNormalized } from "./connection-pool.js";
 
-export async function getBeepResponses(beepId, userId) {
+export async function getBeepResponses(beepId, userId, Nb) {
   return await queryNormalized(
     `
       WITH rebeep AS (
@@ -36,8 +36,8 @@ export async function getBeepResponses(beepId, userId) {
       ORDER BY 
         created_at DESC 
       LIMIT 
-        10
+        $3
     `,
-    [beepId, userId]
+    [beepId, userId, Nb]
   );
 }
