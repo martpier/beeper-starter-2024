@@ -8,6 +8,7 @@ import { postResponse } from "./use-case/response.js"
 import { follow, unfollow } from "./use-case/follow.js";
 import { authMiddleware } from "./auth/auth-middleware.js";
 import { getResponses } from "./use-case/get-responses.js";
+import { getNbBeepsHome } from "./use-case/get-nb-beeps-home.js";
 
 export const api = Router();
 
@@ -122,6 +123,12 @@ api.get("/beepResponses/:beepId/:Nb", async (req, res) => {
   const responses = await getResponses(req.params.beepId, req.user.id, req.params.Nb);
 
   res.json(responses);
+});
+
+api.get("/NbBeepsHome", async (req, res) => {
+  const beeps = await getNbBeepsHome(req.user.id, req.params.Nb);
+
+  res.json(beeps);
 });
 
 api.put("/likeResponse/:responseId", async (req, res) => {

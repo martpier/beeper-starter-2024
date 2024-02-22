@@ -12,12 +12,14 @@ class BeeperHome extends BeeperBase {
     beepList: {
       state: true,
     },
-    NbLoaded: true
+    NbLoaded: true,
+    NbBeeps: true
   };
 
   constructor() {
     super();
     this.beepList = [];
+    this.NbBeeps = 0;
     this.userName = "";
     this.NbLoaded = 10;
   }
@@ -26,6 +28,9 @@ class BeeperHome extends BeeperBase {
     super.connectedCallback();
     const response = await fetch(`/api/home/${this.NbLoaded}`);
     this.beepList = await response.json();
+
+    const response2 = await fetch(`/api/NbBeepsHome/`);
+    this.NbBeeps = await response2.json();
 
     this.userName = (await getActiveUserProfile()).name;
   }
@@ -57,7 +62,6 @@ class BeeperHome extends BeeperBase {
 
   async infiniteScroll() {
     this.NbLoaded += 10;
-    console.log(this.NbLoaded);
     await this.connectedCallback()
   }
 
@@ -65,8 +69,7 @@ class BeeperHome extends BeeperBase {
     return html` <beeper-header></beeper-header>
       <h1>Welcome ${this.userName}!</h1>
       <textarea @keyup=${this.postBeep}></textarea>
-      <beep-list beepList=${JSON.stringify(this.beepList)}></beep-list>
-      <span @click=${this.infiniteScroll}>Load More</span>`;
+      <beep-list beepList=${JSON.stringify(this.beepList)}></beep-list>`;
   }
 
   static styles = [
@@ -86,3 +89,9 @@ class BeeperHome extends BeeperBase {
 }
 
 customElements.define("beeper-home", BeeperHome);
+
+document.addEventListener('scroll', event => {
+  if (Math.abs(document.body.scrollHeight - (window.scrollY + window.innerHeight)) < 50) {
+      document.querySelector("beeper-home").infiniteScroll();
+  }
+});
