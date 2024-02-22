@@ -30,7 +30,8 @@ class BeeperHome extends BeeperBase {
     this.beepList = await response.json();
 
     const response2 = await fetch(`/api/NbBeepsHome/`);
-    this.NbBeeps = await response2.json();
+    const tmp = await response2.json();
+    this.NbBeeps = tmp[0].count;
 
     this.userName = (await getActiveUserProfile()).name;
   }
@@ -61,8 +62,10 @@ class BeeperHome extends BeeperBase {
   }
 
   async infiniteScroll() {
-    this.NbLoaded += 10;
-    await this.connectedCallback()
+    if (this.NbBeeps - this.NbLoaded > 0) {
+      this.NbLoaded += 10;
+      await this.connectedCallback();
+    }
   }
 
   render() {
