@@ -11,7 +11,8 @@ export class BeepView extends BeeperBase {
       state: true,
     },
     nbLoaded: true,
-    unroll: true
+    unroll: true,
+    messageButton: true,
   };
 
   constructor() {
@@ -136,7 +137,7 @@ export class BeepView extends BeeperBase {
     </span>
     <div class="button-container">
       <span class="response-visibility ${(this.rebeepList.length == 0) ? "rolled" : ""}">
-        <button type="button" class="response-button" @click=${this.unrollResponses}>Afficher les réponses (${this.rebeepList.length})</button>
+        <button type="button" class="response-button" @click=${this.unrollResponses}>${this.unroll ? `Afficher les réponses (${this.rebeepList.length})` : "Masquer les réponses" }</button>
       </span>
     </div>`;
   }
