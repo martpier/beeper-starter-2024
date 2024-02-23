@@ -225,6 +225,20 @@ export class BeepView extends BeeperBase {
       .label-reply {
         margin-right: 10px;
       }
+
+      button {
+        background-color: #B1C6DA;
+        border: none;
+        padding: 5px;
+        text-align: center;
+        text-decoration: none;
+        margin-bottom: 20px;
+        border-radius: 5px;
+      }
+
+      button:hover {
+        background-color: #8BA0BD;
+      }
     `,
   ];
 }
