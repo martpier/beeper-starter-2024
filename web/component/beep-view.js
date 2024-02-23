@@ -135,7 +135,9 @@ export class BeepView extends BeeperBase {
       <rebeep-list rebeepList=${JSON.stringify(this.rebeepList)}></rebeep-list>
     </span>
     <div class="button-container">
-      <button type="button" class="response-button" @click=${this.unrollResponses}>Afficher les réponses (${this.rebeepList.length})</button>
+      <span class="response-visibility ${(this.rebeepList.length == 0) ? "rolled" : ""}">
+        <button type="button" class="response-button" @click=${this.unrollResponses}>Afficher les réponses (${this.rebeepList.length})</button>
+      </span>
     </div>`;
   }
 
