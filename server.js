@@ -25,22 +25,16 @@ app.use(
 
 app.use(requiresAuth());
 
-app.use(express.static("web/page"));
-app.use(express.static("web"));
-
+// API routes must come before static serving
 app.use("/api", api);
 
-app.get("/", (req, res) => {
-  res.redirect("/home");
-});
+// Serve React build in production
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+app.use(express.static(path.join(__dirname, 'client/dist')));
 
-app.get("/user/*", (req, res) => {
-  res.sendFile(
-    path.join(
-      path.dirname(fileURLToPath(import.meta.url)),
-      "web/page/user/index.html"
-    )
-  );
+// SPA fallback - all non-API routes serve index.html for React Router
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/dist/index.html'));
 });
 
 app.listen(3000);
