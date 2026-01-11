@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { apiCall } from '../api';
 import Header from '../components/Header';
 import BeepList from '../components/BeepList';
 import styles from './UserPage.module.css';
@@ -12,7 +13,7 @@ function UserPage() {
 
   useEffect(() => {
     async function fetchUserInfo() {
-      const response = await fetch(`/api/user/${username}`);
+      const response = await apiCall(`/api/user/${username}`);
       const data = await response.json();
       setUserInfo(data);
     }
@@ -21,10 +22,10 @@ function UserPage() {
 
   async function handleFollow() {
     if (userInfo.followed) {
-      await fetch(`/api/unfollow/${userInfo.viewedUser.id}`, { method: 'PUT' });
+      await apiCall(`/api/unfollow/${userInfo.viewedUser.id}`, { method: 'PUT' });
       setUserInfo({ ...userInfo, followed: false });
     } else {
-      await fetch(`/api/follow/${userInfo.viewedUser.id}`, { method: 'PUT' });
+      await apiCall(`/api/follow/${userInfo.viewedUser.id}`, { method: 'PUT' });
       setUserInfo({ ...userInfo, followed: true });
     }
   }

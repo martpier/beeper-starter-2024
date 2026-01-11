@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { apiCall, API_BASE } from '../api';
 
 const AuthContext = createContext(null);
 
@@ -9,13 +10,20 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const response = await fetch('/api/me');
+        const response = await apiCall('/api/me');
         if (response.ok) {
           const userData = await response.json();
           setUser(userData);
+        } else if (response.status === 401) {
+          // Not authenticated - redirect to login
+          window.location.href = `${API_BASE}/login`;
+          return;
         }
       } catch (error) {
         console.error('Failed to fetch user:', error);
+        // On error, also redirect to login
+        window.location.href = `${API_BASE}/login`;
+        return;
       } finally {
         setLoading(false);
       }

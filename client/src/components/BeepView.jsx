@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { apiCall } from '../api';
 import styles from './BeepView.module.css';
 
 function BeepView({ beep: initialBeep }) {
@@ -7,14 +8,14 @@ function BeepView({ beep: initialBeep }) {
 
   async function handleLike() {
     if (beep.liked) {
-      await fetch(`/api/unlike/${beep.id}`, { method: 'PUT' });
+      await apiCall(`/api/unlike/${beep.id}`, { method: 'PUT' });
       setBeep({
         ...beep,
         liked: false,
         likeCount: beep.likeCount - 1,
       });
     } else {
-      await fetch(`/api/like/${beep.id}`, { method: 'PUT' });
+      await apiCall(`/api/like/${beep.id}`, { method: 'PUT' });
       setBeep({
         ...beep,
         liked: true,
