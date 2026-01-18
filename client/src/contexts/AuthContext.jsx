@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { apiCall, API_BASE } from '../api';
+import { apiCall } from '../api';
 
 const AuthContext = createContext(null);
 
@@ -16,13 +16,13 @@ export function AuthProvider({ children }) {
           setUser(userData);
         } else if (response.status === 401) {
           // Not authenticated - redirect to login
-          window.location.href = `${API_BASE}/login`;
+          window.location.href = '/login';
           return;
         }
       } catch (error) {
         console.error('Failed to fetch user:', error);
         // On error, also redirect to login
-        window.location.href = `${API_BASE}/login`;
+        window.location.href = '/login';
         return;
       } finally {
         setLoading(false);
