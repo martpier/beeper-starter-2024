@@ -6,17 +6,17 @@ import BeepList from '../components/BeepList';
 import styles from './HomePage.module.css';
 
 function HomePage() {
-  const { user } = useAuth();
+  const { user, getAccessTokenSilently } = useAuth();
   const [beepList, setBeepList] = useState([]);
 
   useEffect(() => {
     async function fetchBeeps() {
-      const response = await apiCall('/api/home');
+      const response = await apiCall('/api/home', {}, getAccessTokenSilently);
       const data = await response.json();
       setBeepList(data);
     }
     fetchBeeps();
-  }, []);
+  }, [getAccessTokenSilently]);
 
   async function handleKeyUp(event) {
     if (event.code === 'Enter' && !event.shiftKey) {
@@ -31,7 +31,7 @@ function HomePage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ content }),
-      });
+      }, getAccessTokenSilently);
 
       const postedBeep = await response.json();
       textarea.value = '';

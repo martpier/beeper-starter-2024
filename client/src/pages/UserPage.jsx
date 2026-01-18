@@ -8,24 +8,24 @@ import styles from './UserPage.module.css';
 
 function UserPage() {
   const { username } = useParams();
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, getAccessTokenSilently } = useAuth();
   const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
     async function fetchUserInfo() {
-      const response = await apiCall(`/api/user/${username}`);
+      const response = await apiCall(`/api/user/${username}`, {}, getAccessTokenSilently);
       const data = await response.json();
       setUserInfo(data);
     }
     fetchUserInfo();
-  }, [username]);
+  }, [username, getAccessTokenSilently]);
 
   async function handleFollow() {
     if (userInfo.followed) {
-      await apiCall(`/api/unfollow/${userInfo.viewedUser.id}`, { method: 'PUT' });
+      await apiCall(`/api/unfollow/${userInfo.viewedUser.id}`, { method: 'PUT' }, getAccessTokenSilently);
       setUserInfo({ ...userInfo, followed: false });
     } else {
-      await apiCall(`/api/follow/${userInfo.viewedUser.id}`, { method: 'PUT' });
+      await apiCall(`/api/follow/${userInfo.viewedUser.id}`, { method: 'PUT' }, getAccessTokenSilently);
       setUserInfo({ ...userInfo, followed: true });
     }
   }

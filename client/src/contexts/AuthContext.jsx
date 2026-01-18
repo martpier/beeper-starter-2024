@@ -1,38 +1,13 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { apiCall } from '../api';
+import { createContext, useContext } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const response = await apiCall('/api/me');
-        if (response.ok) {
-          const userData = await response.json();
-          setUser(userData);
-        } else if (response.status === 401) {
-          // Not authenticated - redirect to login
-          window.location.href = '/login';
-          return;
-        }
-      } catch (error) {
-        console.error('Failed to fetch user:', error);
-        // On error, also redirect to login
-        window.location.href = '/login';
-        return;
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchUser();
-  }, []);
+  const auth0 = useAuth0();
 
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={auth0}>
       {children}
     </AuthContext.Provider>
   );

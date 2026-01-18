@@ -2,46 +2,55 @@ import "dotenv/config";
 
 import express from "express";
 import "express-async-errors";
-import expressauth from "express-openid-connect";
+import cors from "cors";
+import { expressjwt } from "express-jwt";
+import jwksRsa from "jwks-rsa";
 
 import path from "path";
 import { fileURLToPath } from "url";
 import { api } from "./api/api-router.js";
-const { auth, requiresAuth } = expressauth;
 
 const app = express();
 
-// auth router attaches /login, /logout, and /callback routes to the baseURL
-app.use(
-  auth({
-    authRequired: false,
-    auth0Logout: true,
-    secret: process.env.AUTH0_SECRET,
-    baseURL: process.env.BASE_URL,
-    clientID: process.env.AUTH0_CLIENT_ID,
-    issuerBaseURL: "https://" + process.env.AUTH0_DOMAIN,
-  })
-);
+// CORS configuration for development (two origins)
+const VITE_DEV_URL = 'http://localhost:5173';
+app.use(cors({
+  origin: VITE_DEV_URL,
+  credentials: true,
+}));
 
-// Custom middleware for API routes - return 401 instead of redirecting
-app.use("/api", (req, res, next) => {
-  if (!req.oidc.isAuthenticated()) {
-    return res.status(401).json({ error: 'Not authenticated' });
-  }
-  next();
+// JWT validation middleware
+const checkJwt = expressjwt({
+  secret: jwksRsa.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
+  }),
+  audience: process.env.AUTH0_AUDIENCE,
+  issuer: `https://${process.env.AUTH0_DOMAIN}/`,
+  algorithms: ['RS256']
 });
 
-// API routes must come before static serving
-app.use("/api", api);
+// Apply JWT validation to all /api routes
+app.use("/api", checkJwt);
 
-// Require auth for all other routes (will redirect to Auth0)
-app.use(requiresAuth());
+// Custom error handler for JWT errors
+app.use("/api", (err, req, res, next) => {
+  if (err.name === 'UnauthorizedError') {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+  next(err);
+});
+
+// API routes
+app.use("/api", api);
 
 // Serve React build in production
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 app.use(express.static(path.join(__dirname, 'client/dist')));
 
-// SPA fallback - all non-API routes serve index.html for React Router
+// SPA fallback - serve index.html for all non-API routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client/dist/index.html'));
 });
