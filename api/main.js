@@ -6,20 +6,16 @@ import cors from "cors";
 import { expressjwt } from "express-jwt";
 import jwksRsa from "jwks-rsa";
 
-import path from "path";
-import { fileURLToPath } from "url";
-import { api } from "./api/api-router.js";
+import { api } from "./router.js";
 
 const app = express();
 
-// CORS configuration for development (two origins)
-const VITE_DEV_URL = 'http://localhost:5173';
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 app.use(cors({
-  origin: VITE_DEV_URL,
+  origin: CLIENT_URL,
   credentials: true,
 }));
 
-// JWT validation middleware
 const checkJwt = expressjwt({
   secret: jwksRsa.expressJwtSecret({
     cache: true,
@@ -32,10 +28,8 @@ const checkJwt = expressjwt({
   algorithms: ['RS256']
 });
 
-// Apply JWT validation to all /api routes
 app.use("/api", checkJwt);
 
-// Custom error handler for JWT errors
 app.use("/api", (err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
     return res.status(401).json({ error: 'Invalid token' });
@@ -43,16 +37,9 @@ app.use("/api", (err, req, res, next) => {
   next(err);
 });
 
-// API routes
 app.use("/api", api);
 
-// Serve React build in production
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-app.use(express.static(path.join(__dirname, 'client/dist')));
-
-// SPA fallback - serve index.html for all non-API routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/dist/index.html'));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`API server running on port ${PORT}`);
 });
-
-app.listen(3000);
