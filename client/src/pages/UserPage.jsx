@@ -1,6 +1,6 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import { apiCall } from '../api';
 import Header from '../components/Header';
 import BeepList from '../components/BeepList';
@@ -8,12 +8,12 @@ import styles from './UserPage.module.css';
 
 function UserPage() {
   const { username } = useParams();
-  const { user: currentUser, getAccessTokenSilently } = useAuth();
+  const { user: currentUser, getAccessTokenSilently } = useAuth0();
   const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
     async function fetchUserInfo() {
-      const response = await apiCall(`/api/user/${username}`, {}, getAccessTokenSilently);
+      const response = await apiCall(`/user/${username}`, {}, getAccessTokenSilently);
       const data = await response.json();
       setUserInfo(data);
     }
@@ -22,10 +22,10 @@ function UserPage() {
 
   async function handleFollow() {
     if (userInfo.followed) {
-      await apiCall(`/api/unfollow/${userInfo.viewedUser.id}`, { method: 'PUT' }, getAccessTokenSilently);
+      await apiCall(`/unfollow/${userInfo.viewedUser.id}`, { method: 'PUT' }, getAccessTokenSilently);
       setUserInfo({ ...userInfo, followed: false });
     } else {
-      await apiCall(`/api/follow/${userInfo.viewedUser.id}`, { method: 'PUT' }, getAccessTokenSilently);
+      await apiCall(`/follow/${userInfo.viewedUser.id}`, { method: 'PUT' }, getAccessTokenSilently);
       setUserInfo({ ...userInfo, followed: true });
     }
   }

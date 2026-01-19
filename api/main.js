@@ -28,16 +28,16 @@ const checkJwt = expressjwt({
   algorithms: ['RS256']
 });
 
-app.use("/api", checkJwt);
+app.use("/", checkJwt);
 
-app.use("/api", (err, req, res, next) => {
+app.use("/", (err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
     return res.status(401).json({ error: 'Invalid token' });
   }
   next(err);
 });
 
-app.use("/api", api);
+app.use("/", api);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

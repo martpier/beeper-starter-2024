@@ -1,17 +1,17 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
 import { apiCall } from '../api';
 import Header from '../components/Header';
 import BeepList from '../components/BeepList';
 import styles from './HomePage.module.css';
 
 function HomePage() {
-  const { user, getAccessTokenSilently } = useAuth();
+  const { user, getAccessTokenSilently } = useAuth0();
   const [beepList, setBeepList] = useState([]);
 
   useEffect(() => {
     async function fetchBeeps() {
-      const response = await apiCall('/api/home', {}, getAccessTokenSilently);
+      const response = await apiCall('/home', {}, getAccessTokenSilently);
       const data = await response.json();
       setBeepList(data);
     }
@@ -25,7 +25,7 @@ function HomePage() {
       // Remove the newline character that was just added
       content = content.slice(0, content.length - 1);
 
-      const response = await apiCall('/api/beep', {
+      const response = await apiCall('/beep', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

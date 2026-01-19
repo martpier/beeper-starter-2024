@@ -1,10 +1,10 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
 import HomePage from './pages/HomePage';
 import UserPage from './pages/UserPage';
 
-function ProtectedApp() {
-  const { isAuthenticated, isLoading, loginWithRedirect } = useAuth();
+function App() {
+  const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -18,19 +18,11 @@ function ProtectedApp() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/home" element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/user/:username" element={<UserPage />} />
         <Route path="/" element={<Navigate to="/home" replace />} />
       </Routes>
     </BrowserRouter>
-  );
-}
-
-function App() {
-  return (
-    <AuthProvider>
-      <ProtectedApp />
-    </AuthProvider>
   );
 }
 

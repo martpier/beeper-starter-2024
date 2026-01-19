@@ -1,9 +1,9 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import styles from './Header.module.css';
 
 function Header() {
-  const { user, logout } = useAuth();
+  const { user, logout } = useAuth0();
 
   const handleLogout = () => {
     logout({
