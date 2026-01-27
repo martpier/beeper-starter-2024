@@ -17,7 +17,7 @@ function HomePage() {
       setBeepList(data);
     }
     fetchBeeps();
-  }, []);
+  }, [apiFetch]);
 
   async function handleKeyUp(event) {
     if (event.code === 'Enter' && !event.shiftKey) {

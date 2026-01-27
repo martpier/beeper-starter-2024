@@ -1,4 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { useCallback } from "react";
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
@@ -6,7 +7,7 @@ export function useAuthenticatedFetch() {
   const { getAccessTokenSilently } = useAuth0();
 
 
-  return async (endpoint, options = {}) => {
+  return useCallback(async (endpoint, options = {}) => {
     const token = await getAccessTokenSilently();
 
     return fetch(`${API_BASE}${endpoint}`, {
@@ -16,5 +17,5 @@ export function useAuthenticatedFetch() {
         'Authorization': `Bearer ${token}`,
       },
     });
-  };
+  }, [getAccessTokenSilently]);
 }
