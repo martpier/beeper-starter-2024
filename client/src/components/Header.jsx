@@ -15,7 +15,7 @@ function Header() {
 
   return (
     <div className={styles.header}>
-      <Link to="/home">🏠 Home</Link>
+      <Link to="/">🏠 Home</Link>
       <button onClick={handleLogout} className={styles.logout}>
         logout
       </button>
