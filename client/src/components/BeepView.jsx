@@ -1,23 +1,22 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { apiCall } from '../api';
+import { useAuthenticatedFetch } from '../hooks/useAuthenticatedFetch';
 import styles from './BeepView.module.css';
 
 function BeepView({ beep: initialBeep }) {
-  const { getAccessTokenSilently } = useAuth0();
+  const apiFetch = useAuthenticatedFetch();
   const [beep, setBeep] = useState(initialBeep);
 
   async function handleLike() {
     if (beep.liked) {
-      await apiCall(`/unlike/${beep.id}`, { method: 'PUT' }, getAccessTokenSilently);
+      await apiFetch(`/unlike/${beep.id}`, { method: 'PUT' });
       setBeep({
         ...beep,
         liked: false,
         likeCount: beep.likeCount - 1,
       });
     } else {
-      await apiCall(`/like/${beep.id}`, { method: 'PUT' }, getAccessTokenSilently);
+      await apiFetch(`/like/${beep.id}`, { method: 'PUT' });
       setBeep({
         ...beep,
         liked: true,

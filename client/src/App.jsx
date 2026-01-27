@@ -4,7 +4,7 @@ import HomePage from './pages/HomePage';
 import UserPage from './pages/UserPage';
 
 function App() {
-  const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
+  const { isAuthenticated, isLoading, loginWithRedirect, handleRedirectCallback } = useAuth0();
 
   if (isLoading) {
     return <div>Loading...</div>;
